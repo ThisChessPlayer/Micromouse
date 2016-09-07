@@ -1,5 +1,5 @@
 OUT=mmSim
-SOURCE=sim.c
+SOURCE=sim.c mouse.c
 COMPILER=gcc
 LIB=ncurses
 

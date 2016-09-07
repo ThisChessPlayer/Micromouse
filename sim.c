@@ -1,8 +1,9 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include "sim.h"
+#include "mouse.h"
 
-static int actualMaze[MAZE_WIDTH][MAZE_WIDTH] = {};
+int actualMaze[MAZE_WIDTH][MAZE_WIDTH] = {};
 
 int main() {
   char key;
@@ -11,24 +12,35 @@ int main() {
   init();
 
   do{
-    printMenu(DRAW);
+    printMenu(CYAN);
     switch(key) {
       case 'l':                       //Load and draw maze
         initMaze(actualMaze, MAZE_FILE);
         for(row = 0; row < MAZE_WIDTH; row++)
           for(col = 0; col < MAZE_WIDTH; col++)
-            drawTileWalls(col, row, actualMaze[row][col], DARK);
+            drawTileWalls(col, row, actualMaze[row][col], BLUE);
         break;
-      case 'm':                       //Display maze array 
-        printMaze(actualMaze, DRAW);
+      case 'p':                       //Display maze array 
+        printMaze(actualMaze, CYAN);
         break;
       case 'd':                       //Draw empty maze
-        drawMaze(EMPTY, DRAW);
+        drawMaze(EMPTY, YELLOW);
         break;
       case 'c':                       //Clear maze and maze array printouts
         drawMaze(FULL, CLEAR);
         printMaze(actualMaze, CLEAR);
         break;
+      case 'i':
+        initMouse(15, 0);
+        break;
+      case 'r':
+        runMouse(MAPPING, YELLOW);
+        break;
+      case 'f':
+        drawMouseArray(ARRAY_FLOODMAZE);
+        break;
+      case 'm':
+        drawMouseArray(ARRAY_MOUSEMAZE);
     }
     key = ' ';
     timeout(TIMEOUT);
@@ -36,6 +48,52 @@ int main() {
   
   endwin();               //deallocate mem associated with ncurses
   return 0;
+}
+
+void drawMouseArray(int arr) {
+  int row, col, value;
+
+  for(row = 0; row < MAZE_WIDTH; row++)
+    for(col = 0; col < MAZE_WIDTH; col++) {
+      if(arr == ARRAY_MOUSEMAZE)
+        value = getMouseMaze(row, col);
+      else if(arr == ARRAY_FLOODMAZE)
+        value = getFloodMaze(row, col);
+      mvprintw(MAZE_START_ROW + row * 2 + 1, MAZE_START_COL + col * 3 + 1,
+               "%2x", value);
+    }
+}
+
+void runMouse(int mouseMode, int drawMode) {
+  int curRow, curCol;
+
+  curRow = getMouseRow();
+  curCol = getMouseCol();
+  
+  if(mouseMode == SPEED) {
+    buildSpeedPath(8, 8);
+    speedRun(8, 8);
+    return;
+  }
+  else if(mouseMode == MAPPING)
+    mapMaze(8, 8, STEP);
+  else if(mouseMode == OPTIMIZING)
+    mapMaze(15, 0, STEP);
+  
+  drawTileWalls(curCol, curRow, getMouseMaze(curRow, curCol), drawMode);
+
+  drawMouse(curRow, curCol);
+}
+
+void drawMouse(int mouseRow, int mouseCol) {
+  int row, col;
+
+  for(row = 0; row < MAZE_WIDTH; row++)
+    for(col = 0; col < MAZE_WIDTH; col++)
+      mvaddch(MAZE_START_ROW + row * 2 + 1, MAZE_START_COL + col * 3 + 1, ' ');
+  
+  mvaddch(MAZE_START_ROW + mouseRow * 2 + 1, MAZE_START_COL + mouseCol * 3 + 1,
+          ACS_DIAMOND);
 }
 
 void printMenu(int mode) {
@@ -123,11 +181,11 @@ void drawMaze(int type, int mode) {
         for(col = 0; col < MAZE_WIDTH + 1; col++)
           mvaddch(row, MAZE_START_COL + col * 3, ACS_VLINE);
       else {
-        addch(ACS_DIAMOND);
+        addch(ACS_BULLET);
         for(col = 0; col < MAZE_WIDTH; col++) {
           addch(ACS_HLINE);
           addch(ACS_HLINE);
-          addch(ACS_DIAMOND);
+          addch(ACS_BULLET);
         }
       }
     }
@@ -139,11 +197,11 @@ void drawMaze(int type, int mode) {
     for(row = MAZE_START_ROW; row <= MAZE_START_ROW + MAZE_WIDTH * 2; row++) {
       if(row == MAZE_START_ROW || row == MAZE_START_ROW + MAZE_WIDTH * 2) {
         move(row, MAZE_START_COL);
-        addch(ACS_DIAMOND);
+        addch(ACS_BULLET);
         for(col = 0; col < MAZE_WIDTH; col++) {
           addch(ACS_HLINE);
           addch(ACS_HLINE);
-          addch(ACS_DIAMOND);
+          addch(ACS_BULLET);
         }
       }
       else if(row % 2 == 0) {
@@ -152,7 +210,7 @@ void drawMaze(int type, int mode) {
       }
       else {
         for(col = 0; col <= MAZE_WIDTH; col++) {
-          mvaddch(row, MAZE_START_COL + col * 3, ACS_DIAMOND);
+          mvaddch(row, MAZE_START_COL + col * 3, ACS_BULLET);
         }
       }
     }
@@ -183,12 +241,15 @@ void init() {
   raw();
 
   start_color();         //initializes colors
-  init_pair(DRAW, COLOR_CYAN, COLOR_BLACK);
-  init_pair(DARK, COLOR_BLUE, COLOR_BLACK);
+  init_pair(CYAN, COLOR_CYAN, COLOR_BLACK);
+  init_pair(BLUE, COLOR_BLUE, COLOR_BLACK);
+  init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
   init_pair(CLEAR, COLOR_BLACK, COLOR_BLACK);
   init_pair(DEBUG, COLOR_BLACK, COLOR_YELLOW);
   curs_set(0);
   noecho();
+}
 
-
+int getActualMaze(int row, int col) {
+  return actualMaze[row][col];
 }
