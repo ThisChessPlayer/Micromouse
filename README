@@ -6,9 +6,37 @@
                    | | | | | | | | | | |__| |_| |_| | | | | |
                    |_| |_| |_|_| |_| |_|____|_____|_| |_| |_|
 -------------------------------------------------------------------------------
+Simulates a Micromouse maze for debugging and visualization of maze-solving
+algorithms. 2 spaces in each cell are used to display corresponding array
+values, and any part of the maze can be colored separately.
+-------------------------------------------------------------------------------
+Dependencies:
+  -ncurses
+-------------------------------------------------------------------------------
+Tested on:
+  -Linux (Debian)
+-------------------------------------------------------------------------------
+Running program:
+Go to directory containing Makefile and run the following commands:
+        make mmSim
+	./mmSim
+-------------------------------------------------------------------------------
+Changelog:
+Sep 06th
+  Sim
+    -Added support for initializing mouse, running mouse in simulation step by 
+     step, and seeing mouse location in maze.
+    -Colors of walls can be changed for distinguishing mouse-seen maze from
+     actual maze.
+    -2 spaces in each cell are usable for displaying array values in hex, also
+     colored.
+  Mouse
+    -Added simple partial floodfill algorithm from early build.
+    -Represents high level version of actual mouse, easy for testing algorithms
+     with.
 
 Aug 17th
   Sim
     -Added ncurses support.
     -Added loading maze from file, drawing empty maze, maze walls.
-    -Added menu to right of maze to make it more user-friendly
+    -Added menu to right of maze to make it more user-friendly.

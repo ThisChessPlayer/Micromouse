@@ -35,8 +35,9 @@
 #define WALLS      15
 
 /* mazes to get from mouse */
-#define ARRAY_MOUSEMAZE 0
-#define ARRAY_FLOODMAZE 1
+#define ARRAY_MOUSEMAZE  0
+#define ARRAY_FLOODMAZE  1
+#define ARRAY_ACTUALMAZE 2
 
 /* url for maze file */
 #define MAZE_FILE "./maze"
@@ -47,7 +48,7 @@ static int actualMaze[MAZE_WIDTH][MAZE_WIDTH] = {};
 
 /* function definitions */
 void runMouse(int mouseMode, int drawMode);
-void drawMouseArray(int arr);
+void drawArray(int arr, int drawMode);
 void drawMouse(int mouseRow, int mouseCol);
 
 void printMenu(int mode);

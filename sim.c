@@ -37,10 +37,14 @@ int main() {
         runMouse(MAPPING, YELLOW);
         break;
       case 'f':
-        drawMouseArray(ARRAY_FLOODMAZE);
+        drawArray(ARRAY_FLOODMAZE, CYAN);
         break;
       case 'm':
-        drawMouseArray(ARRAY_MOUSEMAZE);
+        drawArray(ARRAY_MOUSEMAZE, CYAN);
+        break;
+      case 'a':
+        drawArray(ARRAY_ACTUALMAZE, BLUE);
+        break;
     }
     key = ' ';
     timeout(TIMEOUT);
@@ -50,8 +54,10 @@ int main() {
   return 0;
 }
 
-void drawMouseArray(int arr) {
+void drawArray(int arr, int drawMode) {
   int row, col, value;
+  
+  attron(COLOR_PAIR(drawMode));
 
   for(row = 0; row < MAZE_WIDTH; row++)
     for(col = 0; col < MAZE_WIDTH; col++) {
@@ -59,9 +65,13 @@ void drawMouseArray(int arr) {
         value = getMouseMaze(row, col);
       else if(arr == ARRAY_FLOODMAZE)
         value = getFloodMaze(row, col);
+      else if(arr == ARRAY_ACTUALMAZE)
+        value = actualMaze[row][col];
       mvprintw(MAZE_START_ROW + row * 2 + 1, MAZE_START_COL + col * 3 + 1,
                "%2x", value);
     }
+
+  attroff(COLOR_PAIR(drawMode));
 }
 
 void runMouse(int mouseMode, int drawMode) {
@@ -123,9 +133,13 @@ void printMenu(int mode) {
 
   //Print menu
   mvprintw(row + 1, col + 1, "l Load maze");
-  mvprintw(row + 2, col + 1, "m Disp array");
-  mvprintw(row + 3, col + 1, "d Draw empty maze");
-  mvprintw(row + 4, col + 1, "c Clear maze");
+  mvprintw(row + 2, col + 1, "d Draw empty maze");
+  mvprintw(row + 3, col + 1, "a Disp array");
+  mvprintw(row + 4, col + 1, "i Init mouse");
+  mvprintw(row + 5, col + 1, "r Run mouse step");
+  mvprintw(row + 6, col + 1, "f Disp floodMaze");
+  mvprintw(row + 7, col + 1, "m Disp mouseMaze");
+  mvprintw(row + 8, col + 1, "c Clear maze");
   attroff(COLOR_PAIR(mode));
 }
 
