@@ -46,6 +46,9 @@ int main() {
       case 'a':
         drawArray(ARRAY_ACTUALMAZE, BLUE);
         break;
+      case 't':
+        runMouse(OPTIMIZING, YELLOW);
+        break;
     }
     key = ' ';
     timeout(TIMEOUT);
