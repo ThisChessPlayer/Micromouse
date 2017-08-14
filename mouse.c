@@ -109,7 +109,7 @@ void updateFlood(int row, int col) {
   else {
     
     //find all higher flood value neighbors
-    //higher = lower ^ (mouseMaze[row][col] & WALLS);
+    higher = lower ^ (mouseMaze[row][col] & WALLS);
 
     //reset current tile flood
     floodMaze[row][col] = MAZE_WIDTH * MAZE_WIDTH - 1;
@@ -208,7 +208,17 @@ void validateFlood(int row, int col) {
  
   //otherwise, make value valid
   floodMaze[row][col] = lowest + 1;
+  
+  if(row > 0)
+    validateFlood(row - 1, col);
+  if(row < MAZE_WIDTH - 1)
+    validateFlood(row + 1, col);
+  if(col > 0)
+    validateFlood(row, col - 1);
+  if(col < MAZE_WIDTH - 1)
+    validateFlood(row, col + 1);
 
+  /*
   if(row > 0 && (mouseMaze[row][col] & UPPER_WALL) != UPPER_WALL)
     validateFlood(row - 1, col);
   if(row < MAZE_WIDTH - 1 && (mouseMaze[row][col] & LOWER_WALL) != LOWER_WALL)
@@ -217,6 +227,7 @@ void validateFlood(int row, int col) {
     validateFlood(row, col - 1);
   if(col < MAZE_WIDTH - 1 && (mouseMaze[row][col] & RIGHT_WALL) != RIGHT_WALL)
     validateFlood(row, col + 1);
+  */
 }
 
 void floodFill(int num, int row, int col) {

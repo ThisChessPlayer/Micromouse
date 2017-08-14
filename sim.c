@@ -8,8 +8,9 @@ int actualMaze[MAZE_WIDTH][MAZE_WIDTH] = {};
 int main() {
   char key;
   int row, col;
-  
-  init();
+  bool result;
+  init(); 
+  noecho();
 
   do{
     printMenu(CYAN);
@@ -48,8 +49,7 @@ int main() {
     }
     key = ' ';
     timeout(TIMEOUT);
-  }while((key = getch()) != 'q' && key != 'Q' && key != EOF);
-  
+  }while((key = getch()) != 'q' && key != 'Q');
   endwin();               //deallocate mem associated with ncurses
   return 0;
 }
