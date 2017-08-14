@@ -5,12 +5,18 @@
 
 int actualMaze[MAZE_WIDTH][MAZE_WIDTH] = {};
 
+/******************************************************************************
+  Routine Name: main
+  File:         sim.c
+  
+  Description: Drives program, handles input, and delegates tasks based on
+               pressed keys
+******************************************************************************/
 int main() {
   char key;
   int row, col;
   bool result;
   init(); 
-  noecho();
 
   do{
     printMenu(CYAN);
@@ -57,6 +63,18 @@ int main() {
   return 0;
 }
 
+/******************************************************************************
+  Routine Name: drawArray
+  File:         sim.c
+  
+  Description: Draws specified maze using drawMode color pair onto the screen.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  arr                array containing maze
+  drawMode           color pair to use when drawing maze
+******************************************************************************/
 void drawArray(int arr, int drawMode) {
   int row, col, value;
   
@@ -77,6 +95,18 @@ void drawArray(int arr, int drawMode) {
   attroff(COLOR_PAIR(drawMode));
 }
 
+/******************************************************************************
+  Routine Name: runMouse
+  File:         sim.c
+  
+  Description: Interface used to call mouse functions.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  mouseMode          mode mouse is in
+  drawMode           color pair to color tile walls that were just updated
+******************************************************************************/
 void runMouse(int mouseMode, int drawMode) {
   int curRow, curCol;
 
@@ -98,6 +128,18 @@ void runMouse(int mouseMode, int drawMode) {
   drawMouse(curRow, curCol);
 }
 
+/******************************************************************************
+  Routine Name: drawMouse
+  File:         sim.c
+  
+  Description: Draws mouse marker on maze
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  mouseRow           row of mouse
+  mouseCol           col of mouse
+******************************************************************************/
 void drawMouse(int mouseRow, int mouseCol) {
   int row, col;
 
@@ -109,6 +151,17 @@ void drawMouse(int mouseRow, int mouseCol) {
           ACS_DIAMOND);
 }
 
+/******************************************************************************
+  Routine Name: printMenu
+  File:         sim.c
+  
+  Description: Displays status bar to side of maze
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  mode               color pair used to draw menu
+******************************************************************************/
 void printMenu(int mode) {
   int row, col, i;
 
@@ -146,6 +199,18 @@ void printMenu(int mode) {
   attroff(COLOR_PAIR(mode));
 }
 
+/******************************************************************************
+  Routine Name: printMaze
+  File:         sim.c
+  
+  Description: Prints maze to screen using color pair specified.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  maze               maze in array form to print
+  mode               color pair to use
+******************************************************************************/
 void printMaze(int maze[MAZE_WIDTH][MAZE_WIDTH], int mode) {
   int row, col;
   
@@ -160,6 +225,20 @@ void printMaze(int maze[MAZE_WIDTH][MAZE_WIDTH], int mode) {
   attroff(COLOR_PAIR(mode));
 }
 
+/******************************************************************************
+  Routine Name: drawTileWalls
+  File:         sim.c
+  
+  Description: Draws walls of specified color for tile at given coordinates
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  xTile              x location of tile
+  yTile              y location of tile
+  walls              wall information
+  mode               color pair to use
+******************************************************************************/
 void drawTileWalls(int xTile, int yTile, int walls, int mode) {
   int xDraw, yDraw;
   
@@ -186,6 +265,18 @@ void drawTileWalls(int xTile, int yTile, int walls, int mode) {
   attroff(COLOR_PAIR(mode));
 }
 
+/******************************************************************************
+  Routine Name: drawMaze
+  File:         sim.c
+  
+  Description: Draws either full or empty maze
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  type               full or empty
+  mode               color pair to use
+******************************************************************************/
 void drawMaze(int type, int mode) {
   int row, col;
   
@@ -236,6 +327,18 @@ void drawMaze(int type, int mode) {
   attroff(COLOR_PAIR(mode));
 }
 
+/******************************************************************************
+  Routine Name: initMaze
+  File:         sim.c
+  
+  Description: Initializes maze with file containing wall information
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  maze               array to fill
+  mazeStr            file containing wall info
+******************************************************************************/
 void initMaze(int maze[MAZE_WIDTH][MAZE_WIDTH], char * mazeStr) {
   FILE * mazeFile;
   int row, col, wall;
@@ -252,6 +355,12 @@ void initMaze(int maze[MAZE_WIDTH][MAZE_WIDTH], char * mazeStr) {
   fclose(mazeFile);
 }
 
+/******************************************************************************
+  Routine Name: init
+  File:         sim.c
+  
+  Description: Initializes color pairs and ncurses
+******************************************************************************/
 void init() {
   
   initscr();             //initializes ncurses
@@ -267,6 +376,18 @@ void init() {
   noecho();
 }
 
+/******************************************************************************
+  Routine Name: getActualMaze
+  File:         sim.c
+  
+  Description: Gets wall info of a tile from actual maze
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  row                row of tile
+  col                col of tile
+******************************************************************************/
 int getActualMaze(int row, int col) {
   return actualMaze[row][col];
 }

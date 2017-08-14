@@ -1,3 +1,14 @@
+/******************************************************************************
+
+                                                         Author: Jason Ma
+                                                         Date:   Aug 14 2017
+                                      mouse.c
+
+  File Name:       mouse.c
+  Description:     Mouse implementation to keep track of mouse state and run
+                   algorithms.
+******************************************************************************/
+
 #include "sim.h"
 #include "mouse.h"
 
@@ -9,6 +20,18 @@ int curCol;
 int queueTop;
 int destRow, destCol;
 
+/******************************************************************************
+  Routine Name: initMouse
+  File:         mouse.c
+  
+  Description: Initializes mouse with the starting location
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  startRow           mouse start row
+  startCol           mouse start column
+******************************************************************************/
 void initMouse(int startRow, int startCol) {
   int row, col;
 
@@ -24,6 +47,19 @@ void initMouse(int startRow, int startCol) {
   queueTop = 0;
 }
 
+/******************************************************************************
+  Routine Name: mapMaze
+  File:         mouse.c
+  
+  Description: Traverse through maze until at target location.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  targetRow          target location row
+  targetCol          target location column
+  mode               if step, only takes one step
+******************************************************************************/
 void mapMaze(int targetRow, int targetCol, int mode) {
   int curLoc;
   //read wall info
@@ -55,12 +91,37 @@ void mapMaze(int targetRow, int targetCol, int mode) {
   }while(atDest == 0);
 }
 
+/******************************************************************************
+  Routine Name: atLoc
+  File:         mouse.c
+  
+  Description: Returns 1 (true) if mouse is at location specified
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  row                target location row
+  col                target location column
+******************************************************************************/
 int atLoc(int row, int col) {
   if(curRow == row && curCol == col)
     return 1;
   return 0;
 }
 
+/******************************************************************************
+  Routine Name: scanWalls
+  File:         mouse.c
+  
+  Description: References actual maze for wall information, and updates mouse's
+               memory with appropriate walls.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  row                row of tile to update
+  col                column of tile to update
+******************************************************************************/
 void scanWalls(int row, int col) {
   int actualWall;
   
@@ -93,6 +154,18 @@ void scanWalls(int row, int col) {
   }
 }
 
+/******************************************************************************
+  Routine Name: updateFlood
+  File:         mouse.c
+  
+  Description: Updates floodfill maze starting from specified tile
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  row                row of tile to start from
+  col                column of tile to start from
+******************************************************************************/
 void updateFlood(int row, int col) {
   int lower, higher, nonNeighbor;
 
@@ -159,6 +232,12 @@ void updateFlood(int row, int col) {
   */
 }
 
+/******************************************************************************
+  Routine Name: floodFromQueue
+  File:         mouse.c
+  
+  Description: Starts a floodfill update from each value in floodQueue
+******************************************************************************/
 void floodFromQueue() {
   //for each value in array, flood from location
   int i;
