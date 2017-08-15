@@ -1,3 +1,17 @@
+/******************************************************************************
+
+                                                         Author: Jason Ma
+                                                         Date:   Aug 14 2017
+                                      mmSim
+
+  File Name:       sim.c
+  Description:     Simulation interface for mouse algorithms built on ncurses.
+                   The simulation can be controlled through keyboard input,
+                   featuring several layers of drawings. This way, any 16x16
+                   array can be visualized along with wall information and 
+                   mouse locations. These can also be done in different colors.
+******************************************************************************/
+
 #include <ncurses.h>
 #include <stdio.h>
 #include "sim.h"

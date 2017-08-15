@@ -1,3 +1,14 @@
+/******************************************************************************
+
+                                                         Author: Jason Ma
+                                                         Date:   Aug 14 2017
+                                      mmSim
+
+  File Name:       mouse.h
+  Description:     Mouse implementation to keep track of mouse state and run
+                   algorithms.
+******************************************************************************/
+
 #ifndef MOUSE_H
 #define MOUSE_H
 

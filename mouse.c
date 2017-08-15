@@ -2,7 +2,7 @@
 
                                                          Author: Jason Ma
                                                          Date:   Aug 14 2017
-                                      mouse.c
+                                      mmSim
 
   File Name:       mouse.c
   Description:     Mouse implementation to keep track of mouse state and run
@@ -249,6 +249,19 @@ void floodFromQueue() {
   queueTop = 0;
 }
 
+/******************************************************************************
+  Routine Name: validateFlood
+  File:         mouse.c
+  
+  Description: Ensures that the flood at a particular tile is valid. If not, it
+               validates the tile and validates its neighbors.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  row                row of tile to validate
+  col                column of tile to validate
+******************************************************************************/
 void validateFlood(int row, int col) {
   int lower, lowest;
 
@@ -309,6 +322,19 @@ void validateFlood(int row, int col) {
   */
 }
 
+/******************************************************************************
+  Routine Name: floodFill
+  File:         mouse.c
+  
+  Description: Full floodfill starting from specified location with flood num.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  num                num to start flood at
+  row                row of tile to begin at
+  col                column of tile to begin at
+******************************************************************************/
 void floodFill(int num, int row, int col) {
   floodMaze[row][col] = num;
 
@@ -323,6 +349,14 @@ void floodFill(int num, int row, int col) {
     floodFill(num + 1, row, col + 1);
 }
 
+//TODO maybe integrate this into main algorithm
+/******************************************************************************
+  Routine Name: closeBoxes
+  File:         mouse.c
+  
+  Description: Boxes dead ends off to reduce computational intensity of
+               flooding.
+******************************************************************************/
 void closeBoxes() {
   int row, col;
 
@@ -354,6 +388,21 @@ void closeBoxes() {
         }
 }
 
+/******************************************************************************
+  Routine Name: mouseMove
+  File:         mouse.c
+  
+  Description: Moves mouse based on specified mode. Can also force mouse to
+               jump to specific location in maze.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  mode               if FLOOD, use floodfill maze to move in best direction.
+                     if MANUAL, jump to location
+  row                row of tile to jump to (MANUAL mode only)
+  col                column of tile to jump to (MANUAL mode only)
+******************************************************************************/
 void mouseMove(int mode, int row, int col) {
   int lowest;
   int dir;
@@ -377,6 +426,19 @@ void mouseMove(int mode, int row, int col) {
   }
 }
 
+/******************************************************************************
+  Routine Name: findLowerNeighbor
+  File:         mouse.c
+  
+  Description: Find lowest neighbor's direction if one exists. Can return
+               multiple neighbors' directions if they tie for lowest
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  row                row of tile to check neighbors of
+  col                column of tile to check neighbors of
+******************************************************************************/
 int findLowerNeighbor(int row, int col) {
   
   /* 
@@ -437,26 +499,86 @@ int findLowerNeighbor(int row, int col) {
   return result;
 }
 
+/******************************************************************************
+  Routine Name: buildSpeedPath
+  File:         mouse.c
+  
+  Description: Precomputes path for speed run
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  targetRow          target tile row
+  targetCol          target tile column
+******************************************************************************/
 void buildSpeedPath(int targetRow, int targetCol) {
   /* TODO needs vehicle */  
 }
 
+/******************************************************************************
+  Routine Name: speedRun
+  File:         mouse.c
+  
+  Description: Run through maze as fast as possible. Need vehicle to implement.
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  targetRow          target tile row
+  targetCol          target tile column
+******************************************************************************/
 void speedRun(int targetRow, int targetCol) {
   /* TODO needs vehicle */
 }
 
+/******************************************************************************
+  Routine Name: getMouseRow
+  File:         mouse.c
+  
+  Description: Returns row mouse is at
+******************************************************************************/
 int getMouseRow() {
   return curRow;
 }
 
+/******************************************************************************
+  Routine Name: getMouseCol
+  File:         mouse.c
+  
+  Description: Returns column mouse is at
+******************************************************************************/
 int getMouseCol() {
   return curCol;
 }
 
+/******************************************************************************
+  Routine Name: getMouseMaze
+  File:         mouse.c
+  
+  Description: Returns mouse's memory of a specific tile of the maze
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  row                row of tile to return
+  col                column of tile to return
+******************************************************************************/
 int getMouseMaze(int row, int col) {
   return mouseMaze[row][col];
 }
 
+/******************************************************************************
+  Routine Name: getFloodMaze
+  File:         mouse.c
+  
+  Description: Returns mouse's calculation of certain tile of floodfill
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  row                row of tile to return
+  col                col of tile to return
+******************************************************************************/
 int getFloodMaze(int row, int col) {
   return floodMaze[row][col];
 }
